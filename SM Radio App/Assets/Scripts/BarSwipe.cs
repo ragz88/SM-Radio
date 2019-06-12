@@ -107,31 +107,54 @@ public class BarSwipe : MonoBehaviour
 
             if (Input.GetMouseButtonUp(0))
             {
-                touchTimeFinish = Time.time;
-                touchTimeInterval = touchTimeFinish - touchTimeStart;
-
-                endPos = new Vector2(Input.mousePosition.x, 0);
-                direction = endPos - startPos;
-
-                isTuning = false;
-
-                if (useRisidualForce)
+                
+                if (transform.position.x < 50 && transform.position.x > -50)
                 {
+                    touchTimeFinish = Time.time;
+                    touchTimeInterval = touchTimeFinish - touchTimeStart;
+
+                    endPos = new Vector2(Input.mousePosition.x, 0);
+                    direction = endPos - startPos;
+
+                    isTuning = false;
+
+                    if (useRisidualForce)
+                    {
+                        body.drag = touchTimeInterval * 25;
+                        body.angularDrag = touchTimeInterval * 25;
+
+                        /*if (touchTimeInterval * 10 > 10)
+                        {
+                            body.drag = 10;
+                            body.angularDrag = 10;
+                        }
+                        else*/
+                        if (touchTimeInterval * 25 < 0.2f)
+                        {
+                            body.drag = 0.2f;
+                            body.angularDrag = 0.2f;
+                        }
+
+                        body.AddForce(direction / touchTimeInterval * swipeSpeed);
+                    }
+                }
+                else
+                {
+                    endPos = new Vector2(startPos.x - (25*transform.position.x), 0);
+                    direction = endPos - startPos;
+
+                    isTuning = false;
+
                     body.drag = touchTimeInterval * 25;
                     body.angularDrag = touchTimeInterval * 25;
-
-                    /*if (touchTimeInterval * 10 > 10)
-                    {
-                        body.drag = 10;
-                        body.angularDrag = 10;
-                    }
-                    else*/ if (touchTimeInterval * 25 < 0.2f)
+                    
+                    if (touchTimeInterval * 25 < 0.2f)
                     {
                         body.drag = 0.2f;
                         body.angularDrag = 0.2f;
                     }
 
-                    body.AddForce(direction / touchTimeInterval * swipeSpeed);
+                    body.AddForce(direction * swipeSpeed);
                 }
             }
         }
