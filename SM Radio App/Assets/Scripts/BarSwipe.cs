@@ -14,6 +14,7 @@ public class BarSwipe : MonoBehaviour
 
     public AudioSource tuningSound;
     public float tuningSoundRamp = 0.03f;
+    public float maxTuningVolume = 0.3f;
     bool isTuning = false;
 
     Rigidbody2D body;
@@ -135,7 +136,7 @@ public class BarSwipe : MonoBehaviour
             }
         }
 
-        if (isTuning && tuningSound.volume < 1)
+        if (isTuning && tuningSound.volume < maxTuningVolume)
         {
             tuningSound.volume += tuningSoundRamp;
         }
