@@ -10,17 +10,19 @@ public class Station : MonoBehaviour
     public string stationName;
     public Color stationColour;
     public Color stationBackgroundColour;
+    public Color pointerColour;
     public float stationFreq;
-    public SpriteRenderer sationSprite;
+    public SpriteRenderer stationSprite;
     public SpriteRenderer backgroundSprite;
     public SpriteRenderer vignetteSprite;
     public float logoFadeSpeed = 0.03f;
 
-    SpriteRenderer increments;
+    IncContainer increments;
     SpriteRenderer arrow;
     Color incInitColour;
     Color backInitColour;
     Color vignetteInitColour;
+    Color arrowInitColour;
     Transform scrollBar;
     FrequencyNumber frequency; 
 
@@ -36,12 +38,13 @@ public class Station : MonoBehaviour
     {
         stationSound = GetComponent<AudioSource>();
         
-        increments = GameObject.Find("Increments").GetComponent<SpriteRenderer>();
+        increments = GameObject.Find("IncrementsContainer").GetComponent<IncContainer>();
         arrow = GameObject.Find("Pointer").GetComponent<SpriteRenderer>();
-        incInitColour = increments.color;
+        incInitColour = increments.spriteColour;
         backInitColour = backgroundSprite.color;
         vignetteInitColour = vignetteSprite.color;
 
+        arrowInitColour = arrow.color;
 
         scrollBar = transform.parent;
         
@@ -59,12 +62,13 @@ public class Station : MonoBehaviour
 
         if (Mathf.Abs(frequency.freqNum - stationFreq) < 2)
         {
-            print("boopTrue");
+            //print("boopTrue");
             stationSound.volume = 1.5f - Mathf.Abs(frequency.freqNum - stationFreq);
             staticSound.volume = initStaticSoundVol - (initStaticSoundVol * stationSound.volume);
 
-            increments.color = Color.Lerp(incInitColour, stationColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
-            arrow.color = increments.color;
+            increments.spriteColour = Color.Lerp(incInitColour, stationColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
+            arrow.color = Color.Lerp(arrowInitColour, pointerColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
+            stationSprite.color = new Color(increments.spriteColour.r, increments.spriteColour.g, increments.spriteColour.b, stationSprite.color.a);
             backgroundSprite.color = Color.Lerp(backInitColour, stationBackgroundColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
             vignetteSprite.color = backgroundSprite.color;
         }
@@ -72,20 +76,25 @@ public class Station : MonoBehaviour
         {
             stationSound.volume = 0;
             staticSound.volume = initStaticSoundVol;
-
-            increments.color = incInitColour;
-            arrow.color = incInitColour;
+            stationSprite.color = new Color(incInitColour.r, incInitColour.g, incInitColour.b, 0);
+            increments.spriteColour = incInitColour;
+            arrow.color = arrowInitColour;
             backgroundSprite.color = backInitColour;
             vignetteSprite.color = vignetteInitColour;
         }
-
-        if (stationSound.volume > 0.975f && sationSprite.color.a < 1)
+        else if (Mathf.Abs(frequency.freqNum - stationFreq) >= 3)
         {
-            sationSprite.color = new Color(sationSprite.color.r, sationSprite.color.g, sationSprite.color.b, sationSprite.color.a + logoFadeSpeed);
+            stationSound.volume = 0;
+            stationSprite.color = new Color(incInitColour.r, incInitColour.g, incInitColour.b, 0);
         }
-        else if (stationSound.volume <= 0.975f && sationSprite.color.a > 0)
+
+        if (stationSound.volume > 0.975f && stationSprite.color.a < 1)
         {
-            sationSprite.color = new Color(sationSprite.color.r, sationSprite.color.g, sationSprite.color.b, sationSprite.color.a - logoFadeSpeed);
+            stationSprite.color = new Color(stationSprite.color.r, stationSprite.color.g, stationSprite.color.b, stationSprite.color.a + logoFadeSpeed);
+        }
+        else if (stationSound.volume <= 0.975f && stationSprite.color.a > 0)
+        {
+            stationSprite.color = new Color(stationSprite.color.r, stationSprite.color.g, stationSprite.color.b, stationSprite.color.a - logoFadeSpeed);
         }
 
     }
