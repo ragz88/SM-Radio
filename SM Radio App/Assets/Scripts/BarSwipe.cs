@@ -41,7 +41,7 @@ public class BarSwipe : MonoBehaviour
             }
 
             ///////////////////////////////////////////////////////////////////////////
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 endPos = new Vector2(Input.GetTouch(0).position.x, 0);
                 direction = endPos - startPos;
@@ -85,7 +85,7 @@ public class BarSwipe : MonoBehaviour
                         body.AddForce(direction / touchTimeInterval * swipeSpeed);
                     }
                 }
-                else
+                /*else
                 {
                     endPos = new Vector2(startPos.x - (25 * transform.position.x), 0);
                     direction = endPos - startPos;
@@ -102,7 +102,7 @@ public class BarSwipe : MonoBehaviour
                     }
 
                     body.AddForce(direction * swipeSpeed);
-                }
+                }*/
             }
         }
         else

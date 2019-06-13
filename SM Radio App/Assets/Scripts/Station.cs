@@ -16,6 +16,7 @@ public class Station : MonoBehaviour
     public SpriteRenderer backgroundSprite;
     public SpriteRenderer vignetteSprite;
     public float logoFadeSpeed = 0.03f;
+    public float maxVolume = 1;
 
     IncContainer increments;
     SpriteRenderer arrow;
@@ -65,8 +66,14 @@ public class Station : MonoBehaviour
         if (Mathf.Abs(frequency.freqNum - stationFreq) < clearWidth)
         {
             //print("boopTrue");
-            stationSound.volume = (clearWidth*0.75f) - Mathf.Abs(frequency.freqNum - stationFreq);
+            if (stationSound.isPlaying == false)
+            { 
+                stationSound.Play();
+                stationSound.time = increments.currentPlayTime;
+            }
+            stationSound.volume = ((clearWidth*0.75f) - Mathf.Abs(frequency.freqNum - stationFreq)) * maxVolume;
             staticSound.volume = initStaticSoundVol - (initStaticSoundVol * stationSound.volume);
+
 
             increments.spriteColour = Color.Lerp(incInitColour, stationColour, (clearWidth * 0.75f) - Mathf.Abs(frequency.freqNum - stationFreq));
             arrow.color = Color.Lerp(arrowInitColour, pointerColour, (clearWidth * 0.75f) - Mathf.Abs(frequency.freqNum - stationFreq));
@@ -77,6 +84,7 @@ public class Station : MonoBehaviour
         else if (Mathf.Abs(frequency.freqNum - stationFreq) < (clearWidth + 1))
         {
             stationSound.volume = 0;
+            stationSound.Stop();
             staticSound.volume = initStaticSoundVol;
             stationSprite.color = new Color(incInitColour.r, incInitColour.g, incInitColour.b, 0);
             increments.spriteColour = incInitColour;
@@ -87,14 +95,15 @@ public class Station : MonoBehaviour
         else if (Mathf.Abs(frequency.freqNum - stationFreq) >= (clearWidth + 1))
         {
             stationSound.volume = 0;
+            stationSound.Stop();
             stationSprite.color = new Color(incInitColour.r, incInitColour.g, incInitColour.b, 0);
         }
 
-        if (stationSound.volume > 0.975f && stationSprite.color.a < 1)
+        if (stationSound.volume > (0.975f * maxVolume) && stationSprite.color.a < 1)
         {
             stationSprite.color = new Color(stationSprite.color.r, stationSprite.color.g, stationSprite.color.b, stationSprite.color.a + logoFadeSpeed);
         }
-        else if (stationSound.volume <= 0.975f && stationSprite.color.a > 0)
+        else if (stationSound.volume <= (0.975f *maxVolume) && stationSprite.color.a > 0)
         {
             stationSprite.color = new Color(stationSprite.color.r, stationSprite.color.g, stationSprite.color.b, stationSprite.color.a - logoFadeSpeed);
         }
