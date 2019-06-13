@@ -17,6 +17,7 @@ public class Station : MonoBehaviour
     public float logoFadeSpeed = 0.03f;
 
     SpriteRenderer increments;
+    SpriteRenderer arrow;
     Color incInitColour;
     Color backInitColour;
     Color vignetteInitColour;
@@ -36,6 +37,7 @@ public class Station : MonoBehaviour
         stationSound = GetComponent<AudioSource>();
         
         increments = GameObject.Find("Increments").GetComponent<SpriteRenderer>();
+        arrow = GameObject.Find("Pointer").GetComponent<SpriteRenderer>();
         incInitColour = increments.color;
         backInitColour = backgroundSprite.color;
         vignetteInitColour = vignetteSprite.color;
@@ -47,6 +49,8 @@ public class Station : MonoBehaviour
         frequency = scrollBar.gameObject.GetComponent<FrequencyNumber>();
 
         initStaticSoundVol = staticSound.volume;
+
+        stationSound.volume = 0;
     }
 
     // Update is called once per frame
@@ -60,15 +64,17 @@ public class Station : MonoBehaviour
             staticSound.volume = initStaticSoundVol - (initStaticSoundVol * stationSound.volume);
 
             increments.color = Color.Lerp(incInitColour, stationColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
+            arrow.color = increments.color;
             backgroundSprite.color = Color.Lerp(backInitColour, stationBackgroundColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
             vignetteSprite.color = backgroundSprite.color;
         }
-        else
+        else if (Mathf.Abs(frequency.freqNum - stationFreq) < 3)
         {
             stationSound.volume = 0;
             staticSound.volume = initStaticSoundVol;
 
             increments.color = incInitColour;
+            arrow.color = incInitColour;
             backgroundSprite.color = backInitColour;
             vignetteSprite.color = vignetteInitColour;
         }
