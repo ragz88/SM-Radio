@@ -28,6 +28,8 @@ public class Station : MonoBehaviour
 
     AudioSource stationSound;
     public AudioSource staticSound;
+
+    public float clearWidth = 2;
     float initStaticSoundVol;
 
     bool inRange = false;
@@ -60,19 +62,19 @@ public class Station : MonoBehaviour
     void Update()
     {
 
-        if (Mathf.Abs(frequency.freqNum - stationFreq) < 2)
+        if (Mathf.Abs(frequency.freqNum - stationFreq) < clearWidth)
         {
             //print("boopTrue");
-            stationSound.volume = 1.5f - Mathf.Abs(frequency.freqNum - stationFreq);
+            stationSound.volume = (clearWidth*0.75f) - Mathf.Abs(frequency.freqNum - stationFreq);
             staticSound.volume = initStaticSoundVol - (initStaticSoundVol * stationSound.volume);
 
-            increments.spriteColour = Color.Lerp(incInitColour, stationColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
-            arrow.color = Color.Lerp(arrowInitColour, pointerColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
+            increments.spriteColour = Color.Lerp(incInitColour, stationColour, (clearWidth * 0.75f) - Mathf.Abs(frequency.freqNum - stationFreq));
+            arrow.color = Color.Lerp(arrowInitColour, pointerColour, (clearWidth * 0.75f) - Mathf.Abs(frequency.freqNum - stationFreq));
             stationSprite.color = new Color(increments.spriteColour.r, increments.spriteColour.g, increments.spriteColour.b, stationSprite.color.a);
-            backgroundSprite.color = Color.Lerp(backInitColour, stationBackgroundColour, 1.5f - Mathf.Abs(frequency.freqNum - stationFreq));
+            backgroundSprite.color = Color.Lerp(backInitColour, stationBackgroundColour, (clearWidth * 0.75f) - Mathf.Abs(frequency.freqNum - stationFreq));
             vignetteSprite.color = backgroundSprite.color;
         }
-        else if (Mathf.Abs(frequency.freqNum - stationFreq) < 3)
+        else if (Mathf.Abs(frequency.freqNum - stationFreq) < (clearWidth + 1))
         {
             stationSound.volume = 0;
             staticSound.volume = initStaticSoundVol;
@@ -82,7 +84,7 @@ public class Station : MonoBehaviour
             backgroundSprite.color = backInitColour;
             vignetteSprite.color = vignetteInitColour;
         }
-        else if (Mathf.Abs(frequency.freqNum - stationFreq) >= 3)
+        else if (Mathf.Abs(frequency.freqNum - stationFreq) >= (clearWidth + 1))
         {
             stationSound.volume = 0;
             stationSprite.color = new Color(incInitColour.r, incInitColour.g, incInitColour.b, 0);

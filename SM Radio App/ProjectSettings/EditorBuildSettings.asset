@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/PowerButtonPres.unity
+    guid: affd995ed6678654395ab80e2d5e4246
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 3b2b119ca77e67d4fb57ce3b71cc358f
+  - enabled: 1
+    path: Assets/Scenes/PowerOff.unity
+    guid: e7ed17e8948475249b73ebcfa35305b2
   m_configObjects: {}

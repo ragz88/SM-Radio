@@ -43,7 +43,7 @@ public class BarSwipe : MonoBehaviour
             ///////////////////////////////////////////////////////////////////////////
             if (Input.touchCount > 0)
             {
-                endPos = new Vector2(Input.mousePosition.x, 0);
+                endPos = new Vector2(Input.GetTouch(0).position.x, 0);
                 direction = endPos - startPos;
 
                 transform.position = barInitPos + (direction/100);
@@ -113,6 +113,8 @@ public class BarSwipe : MonoBehaviour
                 startPos = new Vector2(Input.mousePosition.x, 0);
                 barInitPos = transform.position;
                 body.velocity = Vector2.zero;
+
+
 
                 ///tuningSound.Play();
             }

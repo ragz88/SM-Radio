@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BatteryTimer : MonoBehaviour
 {
@@ -21,6 +23,9 @@ public class BatteryTimer : MonoBehaviour
     Color faderColour;
     public float fadeSpeed = 0.1f;
 
+    
+    public Text goodbye;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,20 +38,22 @@ public class BatteryTimer : MonoBehaviour
     {
         currentTimeLeft -= Time.deltaTime;
 
-        if (currentTimeLeft >= 1170)
+        if (currentTimeLeft >= 600)
         {
             batery.color = increments.spriteColour;
             bar.color = increments.spriteColour;
         }
 
-        if (currentTimeLeft < 1170 && currentTimeLeft >= 1165)
+        if (currentTimeLeft < 600 && currentTimeLeft >= 300)
+        //if (currentTimeLeft < 1170 && currentTimeLeft >= 1165)
         {
             bar.gameObject.SetActive(false);
             batery.color = increments.spriteColour;
         }
 
-        
-        if (currentTimeLeft < 1165)
+
+        if (currentTimeLeft < 300)
+        //if (currentTimeLeft < 1160)
         {
             if (bateryShowing)
             {
@@ -70,10 +77,15 @@ public class BatteryTimer : MonoBehaviour
             }
         }
 
-        if (currentTimeLeft < 1160)
+        if (currentTimeLeft <= 10)
         {
             scrollBar.enabled = false;
             fader.color = new Color(faderColour.r, faderColour.g, faderColour.b, fader.color.a + fadeSpeed);
+            goodbye.color = new Color(goodbye.color.r, goodbye.color.g, goodbye.color.b, fader.color.a);
+            if (fader.color.a >= 1)
+            {
+                SceneManager.LoadScene(2);
+            }
         }
 
         blinkTimer += Time.deltaTime;
